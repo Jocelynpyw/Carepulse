@@ -15,6 +15,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import CustomFormField from "@/components/CustomFormField";
+import SubmitButton from "@/components/SubmitButton";
+import { useState } from "react";
+import { UserFormatValidation } from "@/lib/validation";
+import { log } from "console";
+import { useRouter } from "next/navigation";
 
 export enum FormFieldType {
   INPUT = "input",
@@ -27,22 +32,34 @@ export enum FormFieldType {
   SKELETON = "skeleton",
 }
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-});
-
 const PatientForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const router = useRouter();
+  const [isLoading, setIsloading] = useState(false);
+  const form = useForm<z.infer<typeof UserFormatValidation>>({
+    resolver: zodResolver(UserFormatValidation),
     defaultValues: {
-      username: "",
+      name: "",
+      email: "",
+      phone: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit({
+    name,
+    email,
+    phone,
+  }: z.infer<typeof UserFormatValidation>) {
+    setIsloading(true);
+    try {
+      const userDate = { name, email, phone };
+      console.log("le user est : ", userDate);
+      //const user = await createUser(userData);
+
+      //  if (user) router.push(`/patient/${user.$id}/register`);
+    } catch (error) {
+      console.log(error);
+    }
+    //console.log(values);
   }
   return (
     <Form {...form}>
@@ -54,13 +71,29 @@ const PatientForm = () => {
         <CustomFormField
           control={form.control}
           fieldType={FormFieldType.INPUT}
-          name="nom"
+          name="name"
           label="Nom complet"
           placeholder="Joceyn pyw"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
         />
-        <Button type="submit">Submit</Button>
+        <CustomFormField
+          control={form.control}
+          fieldType={FormFieldType.INPUT}
+          name="email"
+          label="Email"
+          placeholder="jocelyn@cesi.fr"
+          iconSrc="/assets/icons/email.svg"
+          iconAlt="email"
+        />
+        <CustomFormField
+          control={form.control}
+          fieldType={FormFieldType.PHONE_INPUT}
+          name="phone"
+          label="Numéro de téléphone"
+          placeholder="(+33) 07 45 67 88"
+        />
+        <SubmitButton isLoading={isLoading}>Commencer</SubmitButton>
       </form>
     </Form>
   );
