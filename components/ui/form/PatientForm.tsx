@@ -20,6 +20,7 @@ import { useState } from "react";
 import { UserFormatValidation } from "@/lib/validation";
 import { log } from "console";
 import { useRouter } from "next/navigation";
+import { createUser } from "@/lib/actions/patient.action";
 
 export enum FormFieldType {
   INPUT = "input",
@@ -51,11 +52,11 @@ const PatientForm = () => {
   }: z.infer<typeof UserFormatValidation>) {
     setIsloading(true);
     try {
-      const userDate = { name, email, phone };
-      console.log("le user est : ", userDate);
-      //const user = await createUser(userData);
+      const userData = { name, email, phone };
+      console.log("le user est : ", userData);
+      const user = await createUser(userData);
 
-      //  if (user) router.push(`/patient/${user.$id}/register`);
+      if (user) router.push(`/patient/${user.$id}/register`);
     } catch (error) {
       console.log(error);
     }
