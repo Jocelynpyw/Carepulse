@@ -25,8 +25,8 @@ import { FormFieldType } from "./PatientForm";
 import { RadioGroup } from "@radix-ui/react-radio-group";
 import { Doctors, GenderOptions } from "@/constants";
 import { RadioGroupItem } from "../radio-group";
-import { SelectItem } from "@radix-ui/react-select";
 import Image from "next/image";
+import { SelectItem } from "../select";
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
