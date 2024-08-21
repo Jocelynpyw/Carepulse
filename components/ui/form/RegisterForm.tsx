@@ -3,24 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form, FormControl } from "@/components/ui/form";
 import CustomFormField from "@/components/CustomFormField";
 import SubmitButton from "@/components/SubmitButton";
 import { useState } from "react";
-import { PatientFormValidation, UserFormatValidation } from "@/lib/validation";
-import { log } from "console";
+import { PatientFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
-import { createUser, registerPatient } from "@/lib/actions/patient.action";
+import { registerPatient } from "@/lib/actions/patient.action";
 import { FormFieldType } from "./PatientForm";
 import { RadioGroup } from "@radix-ui/react-radio-group";
 import {
