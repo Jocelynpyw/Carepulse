@@ -40,3 +40,5 @@ node-appwrite
 
 npx shadcn-ui@latest add radio-group
 npm install react-datepicker --save
+npm install react-dropzone
+npx shadcn-ui@latest add checkbox
