@@ -22,6 +22,7 @@ import { RadioGroupItem } from "../radio-group";
 import Image from "next/image";
 import { SelectItem } from "../select";
 import FileUploader from "@/components/FileUploader";
+import { log } from "console";
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -57,8 +58,11 @@ const RegisterForm = ({ user }: { user: User }) => {
         birthDate: new Date(values.birthDate),
         identificationDocument: formData,
       };
+      console.log("Le dates du patient sont  : ", patientData);
+
       // @ts-ignore
       const patient = await registerPatient(patientData);
+
       if (patient) router.push(`/patients/${user.$id}/new-appointment`);
     } catch (error) {
       console.log(error);

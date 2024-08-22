@@ -29,6 +29,7 @@ export const createUser = async (user: CreateUserParams) => {
 export const getUser = async (userId: string) => {
   try {
     const user = await users.get(userId);
+    return parseStringify(user);
   } catch (error) {
     console.log(error);
   }
@@ -39,6 +40,8 @@ export const registerPatient = async ({
   ...patient
 }: RegisterUserParams) => {
   try {
+    console.log("Nous entrons auand meme dans le fonction ci");
+
     let file;
     if (identificationDocument) {
       const inputFile = InputFile.fromBuffer(
@@ -58,7 +61,7 @@ export const registerPatient = async ({
       "66c242c1003c2bdf708c",
       ID.unique(),
       {
-        identificationDocument: file?.$id || null,
+        identificationDocumentId: file?.$id || null,
         identificationDocumentUrl: `https://cloud.appwrite.io/v1/storage/buckets/66c24389000d1e7c61bd/files/${file?.$id}/view?project="66c2414a001845cebc33"`,
         ...patient,
       }
