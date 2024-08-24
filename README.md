@@ -42,3 +42,5 @@ npx shadcn-ui@latest add radio-group
 npm install react-datepicker --save
 npm install react-dropzone
 npx shadcn-ui@latest add checkbox
+npx shadcn-ui@latest add alert-dialog
+npx shadcn-ui@latest add input-otp
