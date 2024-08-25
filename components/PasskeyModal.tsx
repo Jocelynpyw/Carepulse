@@ -1,44 +1,76 @@
 "use client";
-import React, { useState } from "react";
+
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { decryptKey, encryptKey } from "@/lib/utils";
 
 const PasskeyModal = () => {
-  const [open, setOpen] = useState(true);
+  const router = useRouter();
+  const path = usePathname();
+  const [open, setOpen] = useState(false);
   const [passkey, setPasskey] = useState("");
   const [error, setError] = useState("");
 
-  const router = useRouter();
+  const encryptedKey =
+    typeof window !== "undefined"
+      ? window.localStorage.getItem("accessKey")
+      : null;
+
+  useEffect(() => {
+    const accessKey = encryptedKey && decryptKey(encryptedKey);
+
+    if (path)
+      if (accessKey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY!.toString()) {
+        setOpen(false);
+        router.push("/admin");
+      } else {
+        setOpen(true);
+      }
+  }, [encryptedKey]);
+
   const closeModal = () => {
     setOpen(false);
     router.push("/");
   };
 
-  const validatePasskey = () => {};
+  const validatePasskey = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+
+    if (passkey === process.env.NEXT_PUBLIC_ADMIN_PASSKEY) {
+      const encryptedKey = encryptKey(passkey);
+
+      localStorage.setItem("accessKey", encryptedKey);
+
+      setOpen(false);
+    } else {
+      setError("Code non valide. Vueillez réessayer.");
+    }
+  };
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="shad-alert-dialog ">
+      <AlertDialogContent className="shad-alert-dialog">
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-start justify-between">
-            Vérification d'accès administrateurs
+            Vérification d'accès administrateur
             <Image
               src="/assets/icons/close.svg"
               alt="close"
@@ -49,8 +81,8 @@ const PasskeyModal = () => {
             />
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Pour accéder à la page d'administration, veuillez saisir la clé de
-            sécurité.
+            Pour accéder à la page d'administration, veuillez saisir le code
+            d'access
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div>
@@ -68,6 +100,7 @@ const PasskeyModal = () => {
               <InputOTPSlot className="shad-otp-slot" index={5} />
             </InputOTPGroup>
           </InputOTP>
+
           {error && (
             <p className="shad-error text-14-regular mt-4 flex justify-center">
               {error}
@@ -77,9 +110,9 @@ const PasskeyModal = () => {
         <AlertDialogFooter>
           <AlertDialogAction
             onClick={(e) => validatePasskey(e)}
-            className="shad-primary-btn w-full "
+            className="shad-primary-btn w-full"
           >
-            Entrer le code admin
+            Entrer le code d'accès
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
