@@ -1,5 +1,6 @@
-import DataTable from "@/components/DataTable";
+import { DataTable } from "@/components/DataTable";
 import { StatCard } from "@/components/StatCard";
+import { columns } from "@/components/Tables/columns";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
 import Image from "next/image";
 import Link from "next/link";
@@ -55,7 +56,7 @@ const Admin = async () => {
           />
         </section>
 
-        <DataTable />
+        <DataTable columns={columns} data={appointments.documents} />
       </main>
     </div>
   );

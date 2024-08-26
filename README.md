@@ -44,3 +44,4 @@ npm install react-dropzone
 npx shadcn-ui@latest add checkbox
 npx shadcn-ui@latest add alert-dialog
 npx shadcn-ui@latest add input-otp
+npx shadcn-ui@latest add table
